@@ -1,4 +1,4 @@
-package com.jhss.romtesomupdf;
+package com.artifex.mupdfdemo;
 
 import com.lzy.okhttputils.OkHttpUtils;
 import com.lzy.okhttputils.callback.FileCallback;

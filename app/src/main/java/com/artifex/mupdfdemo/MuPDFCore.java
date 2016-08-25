@@ -2,26 +2,22 @@ package com.artifex.mupdfdemo;
 
 import com.jhss.romtesomupdf.BaseApplication;
 import com.jhss.romtesomupdf.R;
-import com.jhss.romtesomupdf.SoConfigPath;
 
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.PointF;
 import android.graphics.RectF;
-import android.util.Log;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 
 public class MuPDFCore {
 
     /* load our native library */
     private static boolean gs_so_available = false;
-    static {
+
+    public  static void loadLibrary(Context context){
         System.out.println("Loading dll");
 //        System.loadLibrary("mupdf_java");
         File dir = BaseApplication.self.getDir("jniLibs", Activity.MODE_PRIVATE);

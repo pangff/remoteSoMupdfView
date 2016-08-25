@@ -1,6 +1,8 @@
 package com.jhss.romtesomupdf;
 
 import com.artifex.mupdfdemo.MuPDFActivity;
+import com.artifex.mupdfdemo.MuPDFCore;
+import com.artifex.mupdfdemo.PdfManager;
 import com.lzy.okhttputils.OkHttpUtils;
 import com.lzy.okhttputils.callback.FileCallback;
 import com.lzy.okhttputils.request.BaseRequest;
@@ -68,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
         if (PdfManager.getInstance().isPluginInstalled(this)) {
             btPluginManager.setText("卸载插件");
             btPdfFileManager.setClickable(true);
+            MuPDFCore.loadLibrary(MainActivity.this);
         } else {
             btPluginManager.setText("安装插件");
             btPdfFileManager.setClickable(false);
