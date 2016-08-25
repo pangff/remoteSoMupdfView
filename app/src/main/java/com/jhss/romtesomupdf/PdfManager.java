@@ -38,12 +38,12 @@ public class PdfManager {
 
     public void init(Application context){
         OkHttpUtils.init(context);
-        AppSoDirInfo.path = getAppDirInfo();
+        AppSoDirInfo.path = getAppDirInfo(context);
     }
 
 
-    private String getAppDirInfo() {
-        File dir = BaseApplication.self.getDir("jniLibs", Activity.MODE_PRIVATE);
+    private String getAppDirInfo(Application context) {
+        File dir = context.getDir("jniLibs", Activity.MODE_PRIVATE);
         return dir.getAbsolutePath() + File.separator + "armeabi-v7a/libmupdf_java.so";
     }
 

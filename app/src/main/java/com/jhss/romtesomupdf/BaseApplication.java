@@ -8,11 +8,9 @@ import android.app.Application;
  */
 public class BaseApplication extends Application  {
 
-    public static  BaseApplication self = null;
     @Override
     public void onCreate() {
         super.onCreate();
-        self = this;
         PdfManager.getInstance().init(this);
     }
 
