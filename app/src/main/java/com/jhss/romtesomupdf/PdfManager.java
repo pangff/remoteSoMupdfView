@@ -1,9 +1,11 @@
-package com.artifex.mupdfdemo;
+package com.jhss.romtesomupdf;
 
+import com.artifex.mupdfdemo.AppSoDirInfo;
 import com.lzy.okhttputils.OkHttpUtils;
 import com.lzy.okhttputils.callback.FileCallback;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 
 import java.io.BufferedInputStream;
@@ -33,6 +35,17 @@ public class PdfManager {
         return instance;
     }
 
+
+    public void init(Application context){
+        OkHttpUtils.init(context);
+        AppSoDirInfo.path = getAppDirInfo();
+    }
+
+
+    private String getAppDirInfo() {
+        File dir = BaseApplication.self.getDir("jniLibs", Activity.MODE_PRIVATE);
+        return dir.getAbsolutePath() + File.separator + "armeabi-v7a/libmupdf_java.so";
+    }
 
     /**
      * 下载

@@ -1,7 +1,6 @@
 package com.jhss.romtesomupdf;
 
 import com.artifex.mupdfdemo.MuPDFActivity;
-import com.artifex.mupdfdemo.PdfManager;
 import com.lzy.okhttputils.OkHttpUtils;
 import com.lzy.okhttputils.callback.FileCallback;
 import com.lzy.okhttputils.request.BaseRequest;
