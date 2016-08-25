@@ -17,12 +17,10 @@ public class MuPDFCore {
     /* load our native library */
     private static boolean gs_so_available = false;
 
-    public  static void loadLibrary(Context context){
+    static {
         System.out.println("Loading dll");
 //        System.loadLibrary("mupdf_java");
-        File dir = BaseApplication.self.getDir("jniLibs", Activity.MODE_PRIVATE);
-        File distFile = new File(dir.getAbsolutePath() + File.separator + "armeabi-v7a/libmupdf_java.so");
-        System.load(distFile.getAbsolutePath());
+        System.load(AppSoDirInfo.path);
         System.out.println("Loaded dll");
         if (gprfSupportedInternal()) {
             try {
