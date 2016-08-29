@@ -1,6 +1,7 @@
 package com.jhss.romtesomupdf;
 
 import android.os.Handler;
+import android.util.Log;
 
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -121,6 +122,7 @@ public class PdfPluginSearch extends Thread {
      * 检测url是否存在
      */
     private boolean checkHasRemoteFile(String url) {
+        Log.e("pangff","PdfManager-checkHasRemoteFile:"+url);
         try {
             HttpURLConnection.setFollowRedirects(false);
             HttpURLConnection con =

@@ -91,10 +91,12 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(boolean isFromCache, File file, Request request,
                                     @Nullable Response response) {
-                                PdfManager.getInstance()
-                                        .installPlugin(MainActivity.this,
-                                                file.getAbsolutePath());
-                                resetBtnState();
+                                if(response!=null && response.isSuccessful()){
+                                    PdfManager.getInstance()
+                                            .installPlugin(MainActivity.this,
+                                                    file.getAbsolutePath());
+                                    resetBtnState();
+                                }
                             }
 
                             @Override

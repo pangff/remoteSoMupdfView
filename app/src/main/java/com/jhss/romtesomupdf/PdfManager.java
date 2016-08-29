@@ -51,7 +51,6 @@ public class PdfManager {
         this.mHandler = new Handler();
         OkHttpUtils.init(context);
         PdfSoConfig.getInstance().init(context);
-        mPdfPluginSearch = new PdfPluginSearch(mHandler);
     }
 
 
@@ -73,6 +72,7 @@ public class PdfManager {
      * 安装插件
      */
     public void downLoadPlugin(final String baseUrl, final FileCallback fileCallback) {
+        mPdfPluginSearch = new PdfPluginSearch(mHandler);
         String[] supportAbiArray = PdfSoConfig.getSuitableCpuApiArray();
         mPdfPluginSearch.setSupportCupSoUrlQueue(baseUrl, PdfSoConfig.soName, supportAbiArray);
         mPdfPluginSearch.setPluginSearchListener(new PdfPluginSearch.PluginSearchListener() {
