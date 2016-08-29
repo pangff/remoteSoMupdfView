@@ -1,6 +1,7 @@
 package com.jhss.romtesomupdf;
 
 import com.artifex.mupdfdemo.MuPDFActivity;
+import com.jhss.pdf.PdfManager;
 import com.lzy.okhttputils.OkHttpUtils;
 import com.lzy.okhttputils.callback.FileCallback;
 import com.lzy.okhttputils.request.BaseRequest;
@@ -146,6 +147,8 @@ public class MainActivity extends AppCompatActivity {
                                                 + currentSize
                                                 + ";progress:" + progress);
                             }
+
+
                         });
     }
 

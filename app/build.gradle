@@ -27,10 +27,21 @@ android {
         }
     }
 }
+configurations.all {
+    // check for updates every build
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
 
 dependencies {
+    repositories {
+        maven {
+            url "http://192.168.1.62:8081/nexus/content/repositories/android-youguu/"
+        }
+    }
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.lzy.net:okhttputils:1.6.5'
     compile 'com.android.support:appcompat-v7:23.4.0'
+    compile group: "com.jhss.pdf", name: "library", version: "1.0-SNAPSHOT",
+    changing: true exclude module: 'appcompat-v7'
 }

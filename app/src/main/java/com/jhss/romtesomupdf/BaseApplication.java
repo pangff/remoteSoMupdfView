@@ -1,5 +1,7 @@
 package com.jhss.romtesomupdf;
 
+import com.jhss.pdf.PdfManager;
+
 import android.app.Application;
 
 /**
