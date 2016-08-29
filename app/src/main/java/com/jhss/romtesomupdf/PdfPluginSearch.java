@@ -28,7 +28,7 @@ public class PdfPluginSearch extends Thread {
 
     public void setSupportCupSoUrlQueue(String baseUrl,String libName,String[] supportAbi){
         for (int i=0;i<supportAbi.length;i++){
-            supportCupSoUrlQueue.add(baseUrl+"/"+supportAbi+"/"+libName+".zip");
+            supportCupSoUrlQueue.add(baseUrl+"/"+supportAbi[i]+"/"+libName+".zip");
         }
     }
 
