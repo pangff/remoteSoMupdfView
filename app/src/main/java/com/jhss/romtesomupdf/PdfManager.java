@@ -1,5 +1,6 @@
 package com.jhss.romtesomupdf;
 
+import com.artifex.mupdfdemo.MuPDFActivity;
 import com.artifex.mupdfdemo.PdfSoConfig;
 import com.lzy.okhttputils.OkHttpUtils;
 import com.lzy.okhttputils.callback.FileCallback;
@@ -7,6 +8,8 @@ import com.lzy.okhttputils.callback.FileCallback;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.text.TextUtils;
 
 import java.io.BufferedInputStream;
@@ -171,6 +174,29 @@ public class PdfManager {
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
+    }
+
+    /**
+     * 打开pdf文件
+     * @param activity
+     * @param filePath
+     */
+    public void openPdf(Activity activity,String filePath){
+        Uri uri = Uri.fromFile(new File(filePath));
+        Intent intent = new Intent(activity, MuPDFActivity.class);
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setData(uri);
+        activity.startActivity(intent);
+    }
+
+
+    /**
+     * 取消请求
+     */
+    public void cancel(String downloadPluginFile){
+        OkHttpUtils.getInstance().cancelTag(this);
+        File downloadFile = new File(downloadPluginFile);
+        downloadFile.delete();
     }
 
 }
