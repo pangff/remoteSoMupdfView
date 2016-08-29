@@ -10,6 +10,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Handler;
 import android.text.TextUtils;
 
 import java.io.BufferedInputStream;
@@ -31,6 +32,8 @@ public class PdfManager {
 
     PdfPluginSearch mPdfPluginSearch;
 
+    Handler mHandler;
+
     private PdfManager() {
 
     }
@@ -44,9 +47,10 @@ public class PdfManager {
 
 
     public void init(Application context) {
+        this.mHandler = new Handler();
         OkHttpUtils.init(context);
         PdfSoConfig.getInstance().init(context);
-        mPdfPluginSearch = new PdfPluginSearch();
+        mPdfPluginSearch = new PdfPluginSearch(mHandler);
     }
 
 

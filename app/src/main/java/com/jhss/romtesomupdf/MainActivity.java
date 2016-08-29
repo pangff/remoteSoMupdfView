@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
     public void downPdfPlugin(final View view) {
 
         PdfManager.getInstance()
-                .download("http://download.youguu.com/download/mupdf",
+                .downLoadPlugin("http://download.youguu.com/download/mupdf",
                         new FileCallback(Environment.getExternalStorageDirectory() +
                                 "/jhss/pdf", "libmupdf_java.so.zip") {
                             @Override

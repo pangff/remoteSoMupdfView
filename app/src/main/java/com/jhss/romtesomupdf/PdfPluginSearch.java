@@ -1,5 +1,7 @@
 package com.jhss.romtesomupdf;
 
+import android.os.Handler;
+
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -14,7 +16,10 @@ public class PdfPluginSearch extends Thread {
 
     private AtomicBoolean isStop = new AtomicBoolean(false);
 
-    public PdfPluginSearch() {
+    Handler mHandler;
+
+    public PdfPluginSearch(Handler handler) {
+        this.mHandler = handler;
     }
 
     LinkedBlockingQueue<String> supportCupSoUrlQueue = new LinkedBlockingQueue<>();
@@ -54,12 +59,24 @@ public class PdfPluginSearch extends Thread {
         }
         if (mPluginSearchListener != null) {
             if (supportCupAbiUrl == null) {
-                mPluginSearchListener.onSearchFinish(null,null, null);
+                this.mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mPluginSearchListener.onSearchFinish(null,null, null);
+                    }
+                });
+
             } else {
+                final  String cupAbiUrl = supportCupAbiUrl;
                 try {
-                    String[] suitableAbiAndLibName = getSuitableAbiAndLibName(supportCupAbiUrl);
-                    mPluginSearchListener
-                            .onSearchFinish(supportCupAbiUrl,suitableAbiAndLibName[0], suitableAbiAndLibName[1]);
+                    final String[] suitableAbiAndLibName = getSuitableAbiAndLibName(supportCupAbiUrl);
+                    this.mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mPluginSearchListener
+                                    .onSearchFinish(cupAbiUrl,suitableAbiAndLibName[0], suitableAbiAndLibName[1]);
+                        }
+                    });
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
