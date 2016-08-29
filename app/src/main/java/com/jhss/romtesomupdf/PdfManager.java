@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -80,6 +81,9 @@ public class PdfManager {
                 if (fileUrl == null) {
                     fileCallback.onError(false, null, null, null);
                 } else {
+                    Log.e("pangff","PdfManager-fileUrl:"+fileUrl);
+                    Log.e("pangff","PdfManager-suitableAbi:"+suitableAbi);
+                    Log.e("pangff","PdfManager-fileName:"+fileName);
                     PdfSoConfig.getInstance().saveSuitableAbi(suitableAbi);
                     download(fileUrl, fileCallback);
                 }
