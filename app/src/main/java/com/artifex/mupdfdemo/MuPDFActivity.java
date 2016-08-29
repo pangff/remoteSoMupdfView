@@ -21,6 +21,7 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -323,7 +324,7 @@ public class MuPDFActivity extends Activity implements FilePicker.FilePickerSupp
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Log.e("pangff","onCreate=======");
         mAlertBuilder = new AlertDialog.Builder(this);
         gAlertBuilder = mAlertBuilder;  //  keep a static copy of this that other classes can use
 

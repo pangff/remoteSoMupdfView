@@ -1,36 +1,20 @@
 package com.artifex.mupdfdemo;
 
-import com.jhss.romtesomupdf.BaseApplication;
+import com.jhss.romtesomupdf.PdfManager;
 import com.jhss.romtesomupdf.R;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.util.Log;
 
-import java.io.File;
 import java.util.ArrayList;
 
 public class MuPDFCore {
 
     /* load our native library */
     private static boolean gs_so_available = false;
-
-    static {
-        System.out.println("Loading dll");
-//        System.loadLibrary("mupdf_java");
-        System.load(AppSoDirInfo.path);
-        System.out.println("Loaded dll");
-        if (gprfSupportedInternal()) {
-            try {
-                System.loadLibrary("gs");
-                gs_so_available = true;
-            } catch (UnsatisfiedLinkError e) {
-                gs_so_available = false;
-            }
-        }
-    }
 
 
     /* Readable members */
@@ -183,6 +167,9 @@ public class MuPDFCore {
     }
 
     public MuPDFCore(Context context, String filename) throws Exception {
+        Log.e("pangff","loadLibrary=======33");
+        loadLibrary();
+
         globals = openFile(filename);
         if (globals == 0) {
             throw new Exception(
@@ -194,6 +181,9 @@ public class MuPDFCore {
     }
 
     public MuPDFCore(Context context, byte buffer[], String magic) throws Exception {
+        Log.e("pangff","loadLibrary=======sdaf");
+        loadLibrary();
+
         fileBuffer = buffer;
         globals = openBuffer(magic != null ? magic : "");
         if (globals == 0) {
@@ -204,6 +194,23 @@ public class MuPDFCore {
         wasOpenedFromBuffer = true;
     }
 
+
+
+
+    private void loadLibrary(){
+        System.out.println("Loading dll");
+//        System.loadLibrary("mupdf_java");
+        System.load(PdfSoConfig.getInstance().getSoPath());
+        System.out.println("Loaded dll");
+        if (gprfSupportedInternal()) {
+            try {
+                System.loadLibrary("gs");
+                gs_so_available = true;
+            } catch (UnsatisfiedLinkError e) {
+                gs_so_available = false;
+            }
+        }
+    }
     public int countPages() {
         if (numPages < 0) {
             numPages = countPagesSynchronized();

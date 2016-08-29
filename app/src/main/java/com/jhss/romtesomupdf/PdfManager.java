@@ -1,12 +1,13 @@
 package com.jhss.romtesomupdf;
 
-import com.artifex.mupdfdemo.AppSoDirInfo;
+import com.artifex.mupdfdemo.PdfSoConfig;
 import com.lzy.okhttputils.OkHttpUtils;
 import com.lzy.okhttputils.callback.FileCallback;
 
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.text.TextUtils;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -22,58 +23,82 @@ import java.util.zip.ZipInputStream;
  */
 public class PdfManager {
 
+
     private static PdfManager instance;
 
-    private PdfManager(){
+    PdfPluginSearch mPdfPluginSearch;
+
+    private PdfManager() {
 
     }
 
-    public static PdfManager getInstance(){
-        if(instance==null){
+    public static PdfManager getInstance() {
+        if (instance == null) {
             instance = new PdfManager();
         }
         return instance;
     }
 
 
-    public void init(Application context){
+    public void init(Application context) {
         OkHttpUtils.init(context);
-        AppSoDirInfo.path = getAppDirInfo(context);
+        PdfSoConfig.getInstance().init(context);
+        mPdfPluginSearch = new PdfPluginSearch();
     }
 
 
     private String getAppDirInfo(Application context) {
         File dir = context.getDir("jniLibs", Activity.MODE_PRIVATE);
-        return dir.getAbsolutePath() + File.separator + "armeabi-v7a/libmupdf_java.so";
+        return dir.getAbsolutePath();
     }
 
     /**
      * 下载
-     * @param fileUrl
-     * @param fileCallback
      */
-    public void download(String fileUrl,final FileCallback fileCallback){
+    public void download(String fileUrl, final FileCallback fileCallback) {
         OkHttpUtils.get(fileUrl)
                 .tag(this)
                 .execute(fileCallback);
     }
 
     /**
-     * 插件是否安装
-     * @param context
-     * @return
+     * 安装插件
      */
-    public boolean isPluginInstalled(Context context){
+    public void downLoadPlugin(final String baseUrl, final FileCallback fileCallback) {
+        String[] supportAbiArray = PdfSoConfig.getSuitableCpuApiArray();
+        mPdfPluginSearch.setSupportCupSoUrlQueue(baseUrl, PdfSoConfig.soName, supportAbiArray);
+        mPdfPluginSearch.setPluginSearchListener(new PdfPluginSearch.PluginSearchListener() {
+            @Override
+            public void onSearchFinish(String fileUrl, String suitableAbi, String fileName) {
+                if (fileUrl == null) {
+                    fileCallback.onError(false, null, null, null);
+                } else {
+                    PdfSoConfig.getInstance().saveSuitableAbi(suitableAbi);
+                    download(fileUrl, fileCallback);
+                }
+            }
+        });
+        mPdfPluginSearch.start();
+    }
+
+    /**
+     * 插件是否安装
+     */
+    public boolean isPluginInstalled(Context context) {
+        String cupAbi = PdfSoConfig.getInstance().getSuitableAbi();
+        if (TextUtils.isEmpty(cupAbi)) {
+            return false;
+        }
         File dir = context.getDir("jniLibs", Activity.MODE_PRIVATE);
-        File distFile = new File(dir.getAbsolutePath() + File.separator + "armeabi-v7a/libmupdf_java.so");
+        File distFile = new File(
+                dir.getAbsolutePath() + File.separator + cupAbi + File.separator
+                        + PdfSoConfig.soName);
         return distFile.exists();
     }
 
 
     /**
      * 文件是否存在
-     * @param filePath
-     * @return
      */
     public boolean isFileExist(String filePath) {
         File file = new File(filePath);
@@ -82,33 +107,35 @@ public class PdfManager {
 
     /**
      * 卸载插件
-     * @param context
-     * @param downloadPluginFile
-     * @return
      */
-    public void unInstallPlugin(Context context,String downloadPluginFile){
+    public void unInstallPlugin(Context context, String downloadPluginFile) {
+        String cupAbi = PdfSoConfig.getInstance().getSuitableAbi();
         File dir = context.getDir("jniLibs", Activity.MODE_PRIVATE);
-        File distFile = new File(dir.getAbsolutePath() + File.separator + "armeabi-v7a/libmupdf_java.so");
+        File distFile = new File(
+                dir.getAbsolutePath() +
+                        File.separator + cupAbi + File.separator
+                        + PdfSoConfig.soName);
         distFile.delete();
 
         File downloadFile = new File(downloadPluginFile);
         downloadFile.delete();
     }
 
+
     /**
      * 安装插件
-     * @param context
-     * @param downloadPluginFile
      */
-    public void installPlugin(Context context,String downloadPluginFile){
+    public void installPlugin(Context context, String downloadPluginFile) {
+        String cupAbi = PdfSoConfig.getInstance().getSuitableAbi();
         final File dir = context.getDir("jniLibs", Activity.MODE_PRIVATE);
-        unZip(downloadPluginFile,dir.getAbsolutePath()+"/armeabi-v7a");
+        unZip(downloadPluginFile, dir.getAbsolutePath() + "/" + cupAbi);
+        String path = getAppDirInfo((Application) context.getApplicationContext()) + "/"
+                + cupAbi + "/" + PdfSoConfig.soName;
+        PdfSoConfig.getInstance().saveSoPath(path);
     }
 
     /**
      * 解压缩
-     * @param unZipfileName
-     * @param mDestPath
      */
     private void unZip(String unZipfileName, String mDestPath) {
         if (!mDestPath.endsWith("/")) {

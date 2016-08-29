@@ -26,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
 
     Button btPdfFileManager;
 
+    String suitableCupAbi = "armeabi-v7a";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,8 +41,8 @@ public class MainActivity extends AppCompatActivity {
         btPluginManager.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (PdfManager.getInstance().isPluginInstalled(MainActivity.this)) {
-                    PdfManager.getInstance().unInstallPlugin(MainActivity.this,
+                if (PdfManager.getInstance().isPluginInstalled(MainActivity.this, suitableCupAbi)) {
+                    PdfManager.getInstance().unInstallPlugin(MainActivity.this, suitableCupAbi,
                             Environment.getExternalStorageDirectory()
                                     + "/jhss/pdf/libmupdf_java.so.zip");
                     resetBtnState();
@@ -65,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void resetBtnState() {
-        if (PdfManager.getInstance().isPluginInstalled(this)) {
+        if (PdfManager.getInstance().isPluginInstalled(this, suitableCupAbi)) {
             btPluginManager.setText("卸载插件");
             btPdfFileManager.setClickable(true);
         } else {
@@ -92,7 +94,8 @@ public class MainActivity extends AppCompatActivity {
                             public void onResponse(boolean isFromCache, File file, Request request,
                                     @Nullable Response response) {
                                 PdfManager.getInstance()
-                                        .installPlugin(MainActivity.this, file.getAbsolutePath());
+                                        .installPlugin(MainActivity.this, suitableCupAbi,
+                                                file.getAbsolutePath());
                                 resetBtnState();
                             }
 
